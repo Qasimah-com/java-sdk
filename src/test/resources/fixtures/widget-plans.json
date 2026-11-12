@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "uuid": "76eeb42b-b7b1-4bc7-9395-dae97215584e",
+  "code": "OK",
+  "message": "Plans quoted",
+  "data": {
+    "merchantName": "Cart API Test 260924075803",
+    "currency": "SAR",
+    "minAmount": 100,
+    "maxAmount": 4000,
+    "plans": [
+      {
+        "instalments": 2,
+        "frequency": "monthly",
+        "instalmentAmount": 614.38,
+        "firstInstalmentAmount": 614.38,
+        "lastInstalmentAmount": 614.37,
+        "feesIncludingVat": 28.75,
+        "totalPayable": 1228.75,
+        "shariaCompliant": true
+      },
+      {
+        "instalments": 3,
+        "frequency": "monthly",
+        "instalmentAmount": 409.58,
+        "firstInstalmentAmount": 409.58,
+        "lastInstalmentAmount": 409.59,
+        "feesIncludingVat": 28.75,
+        "totalPayable": 1228.75,
+        "shariaCompliant": true
+      },
+      {
+        "instalments": 4,
+        "frequency": "monthly",
+        "instalmentAmount": 307.19,
+        "firstInstalmentAmount": 307.19,
+        "lastInstalmentAmount": 307.18,
+        "feesIncludingVat": 28.75,
+        "totalPayable": 1228.75,
+        "shariaCompliant": true
+      }
+    ]
+  },
+  "errors": null
+}

@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "uuid": "d7ac4270-3c42-4a92-a733-9c1d7865eefe",
+  "code": "PING_QUEUED",
+  "message": "Test event queued",
+  "data": {
+    "eventId": "evt_a05fd3fddfea4ac8bf76a442e3cf441d",
+    "endpointId": "a81cce0b-35c7-45e0-a212-0c9f0969ddf4"
+  },
+  "errors": null
+}

@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "uuid": "fd0b52d5-37b9-4678-9beb-ee8d91b2def7",
+  "code": "WEBHOOK_UPDATED",
+  "message": "Webhook endpoint updated",
+  "data": {
+    "id": "a81cce0b-35c7-45e0-a212-0c9f0969ddf4",
+    "url": "https://example.com/qasimha-webhook",
+    "description": "SDK fixture endpoint (paused)",
+    "events": [
+      "order.confirmed",
+      "order.refunded"
+    ],
+    "isActive": false,
+    "secretHint": "b877",
+    "previousSecretExpiresAt": null,
+    "createdAt": "2026-09-25T23:42:29.556269Z",
+    "updatedAt": "2026-09-25T23:42:37.3003779Z"
+  },
+  "errors": null
+}

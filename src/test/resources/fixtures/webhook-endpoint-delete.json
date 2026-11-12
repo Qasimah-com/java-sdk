@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "uuid": "513087ea-3c46-4777-a644-0afa15341b1a",
+  "code": "WEBHOOK_DELETED",
+  "message": "Webhook endpoint deleted",
+  "data": null,
+  "errors": null
+}

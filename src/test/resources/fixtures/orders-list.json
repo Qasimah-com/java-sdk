@@ -1,0 +1,55 @@
+{
+  "success": true,
+  "uuid": "08bd4a65-79dd-46ee-8ee9-e6806313b740",
+  "code": "SUCCESS",
+  "message": "Orders retrieved",
+  "data": {
+    "data": [
+      {
+        "id": "5c4a3eb5-c2b1-4d0f-b32a-062c379cfeac",
+        "orderReferenceId": "CART-101412-9299-G",
+        "status": "Declined",
+        "policyCode": "BNPL_POLICY_V41",
+        "policyType": "BNPL",
+        "totalAmount": 250.00,
+        "currencyCode": "SAR",
+        "createdAt": "2026-09-25T10:14:13.592218Z",
+        "customerId": "d28f47d0-4435-4604-9b76-70d129c20372",
+        "customerName": "Noura Al-Shammari",
+        "customerEmail": "cart-shopper@qasimha.test",
+        "customerPhone": "+966512349999",
+        "instalments": 4,
+        "channel": "Online",
+        "capturedAmount": 0.00,
+        "refundedAmount": 0.00,
+        "ejarContractNumber": null
+      },
+      {
+        "id": "c1e4f312-f61c-445f-bce4-8551984db9f3",
+        "orderReferenceId": "CART-101412-9299-A",
+        "status": "Declined",
+        "policyCode": "BNPL_POLICY_V41",
+        "policyType": "BNPL",
+        "totalAmount": 1302.10,
+        "currencyCode": "SAR",
+        "createdAt": "2026-09-25T10:14:12.65885Z",
+        "customerId": "d28f47d0-4435-4604-9b76-70d129c20372",
+        "customerName": "Noura Al-Shammari",
+        "customerEmail": "cart-shopper@qasimha.test",
+        "customerPhone": "+966512349999",
+        "instalments": 4,
+        "channel": "Online",
+        "capturedAmount": 0.00,
+        "refundedAmount": 0.00,
+        "ejarContractNumber": null
+      }
+    ],
+    "pagination": {
+      "totalItems": 19,
+      "page": 1,
+      "pageSize": 2,
+      "totalPages": 10
+    }
+  },
+  "errors": null
+}

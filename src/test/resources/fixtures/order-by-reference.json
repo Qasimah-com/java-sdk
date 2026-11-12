@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "uuid": "22e61620-9158-4afd-ac79-a362a10ac7d5",
+  "code": "SUCCESS",
+  "message": "Order retrieved",
+  "data": {
+    "id": "5c4a3eb5-c2b1-4d0f-b32a-062c379cfeac",
+    "orderReferenceId": "CART-101412-9299-G",
+    "status": "Declined",
+    "paymentType": "PayByInstalments",
+    "channel": "Online",
+    "checkoutChannel": null,
+    "totalAmount": 250.00,
+    "taxAmount": 0.00,
+    "shippingAmount": 0.00,
+    "discountAmount": 0.00,
+    "currencyCode": "SAR",
+    "countryCode": "SA",
+    "description": "Cart contract test",
+    "instalments": 4,
+    "downPaymentAmount": 0,
+    "approvedAmount": null,
+    "capturedAmount": 0,
+    "fulfilledAmount": 0.00,
+    "refundedAmount": 0.00,
+    "refundableAmount": 0.00,
+    "collectedAmount": 0,
+    "voidedAmount": 0.00,
+    "reversedAmount": 0.00,
+    "paymentUrl": null,
+    "providerSessionId": null,
+    "providerOrderId": null,
+    "createdAt": "2026-09-25T10:14:13.592218Z",
+    "confirmedAt": null,
+    "fulfilledAt": null,
+    "voidedAt": null,
+    "reversedAt": null,
+    "settledAt": null,
+    "checkoutExpiresAt": null,
+    "expiresAt": null,
+    "ejarContractNumber": null,
+    "notificationLanguage": null,
+    "contractNumber": null,
+    "customer": {
+      "id": "d28f47d0-4435-4604-9b76-70d129c20372",
+      "name": "Noura Al-Shammari",
+      "email": "cart-shopper@qasimha.test",
+      "phone": "+966512349999"
+    },
+    "items": [
+      {
+        "referenceId": "SKU-AR",
+        "name": "سماعات لاسلكية",
+        "type": "physical",
+        "sku": "SKU-AR",
+        "quantity": 1,
+        "unitPrice": 250.00,
+        "totalAmount": 250.00,
+        "taxAmount": 0.00,
+        "discountAmount": 0.00,
+        "imageUrl": null
+      }
+    ],
+    "installments": [],
+    "fulfillments": [],
+    "reversals": [],
+    "voids": [],
+    "statusHistory": [
+      {
+        "fromStatus": "Draft",
+        "toStatus": "Draft",
+        "trigger": "DecisionEvaluated",
+        "createdAt": "2026-09-25T10:14:13.623728Z"
+      },
+      {
+        "fromStatus": "Draft",
+        "toStatus": "Draft",
+        "trigger": "DecisionDeclined",
+        "createdAt": "2026-09-25T10:14:13.623743Z"
+      },
+      {
+        "fromStatus": "Draft",
+        "toStatus": "Declined",
+        "trigger": "DecisionDeclined",
+        "createdAt": "2026-09-25T10:14:13.623747Z"
+      }
+    ]
+  },
+  "errors": null
+}

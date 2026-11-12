@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "uuid": "b2e0f756-f6a1-425b-bc64-a8df16290d2c",
+  "code": "DELIVERY_REPLAYED",
+  "message": "Delivery queued again",
+  "data": {
+    "id": "2743654e-550b-458d-bfe2-ad3338d47807",
+    "eventId": "a05fd3fd-dfea-4ac8-bf76-a442e3cf441d",
+    "eventType": "ping",
+    "orderId": null,
+    "orderReferenceId": null,
+    "status": "Pending",
+    "attempts": 0,
+    "maxAttempts": 11,
+    "nextAttemptAt": "2026-09-25T23:42:36.7925582Z",
+    "lastAttemptAt": null,
+    "lastStatusCode": null,
+    "lastError": null,
+    "responseSnippet": null,
+    "durationMs": null,
+    "succeededAt": null,
+    "replayOfId": "6e44f7d4-a878-4e1c-9148-e7f8745fb50d",
+    "createdAt": "2026-09-25T23:42:36.7925582Z"
+  },
+  "errors": null
+}

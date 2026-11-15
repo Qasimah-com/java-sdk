@@ -13,6 +13,7 @@ import com.qasimha.sdk.model.CreateSessionRequest;
 import com.qasimha.sdk.model.FieldError;
 import com.qasimha.sdk.model.FulfillRequest;
 import com.qasimha.sdk.model.Item;
+import com.qasimha.sdk.model.MerchantUrl;
 import com.qasimha.sdk.model.RefundRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public final class BasketValidator {
 
   private BasketValidator() {}
 
+  @SuppressWarnings("deprecation")
   public static void validate(CreateSessionRequest request) {
     List<FieldError> errors = new ArrayList<>();
     requireText(errors, "OrderReferenceId", request.getOrderReferenceId(), 255);
@@ -38,8 +40,8 @@ public final class BasketValidator {
     amountsOk &= amount(errors, "DiscountAmount", request.getDiscountAmount(), false, true);
     requireLength(errors, "CurrencyCode", request.getCurrencyCode(), 3);
     requireLength(errors, "CountryCode", request.getCountryCode(), 2);
-    if (request.getPaymentType() == null
-        || CheckoutPaymentType.fromValue(request.getPaymentType()) == null) {
+    if (request.getPaymentType() != null
+        && CheckoutPaymentType.fromValue(request.getPaymentType()) == null) {
       errors.add(
           new FieldError(
               "PaymentType",
@@ -48,6 +50,8 @@ public final class BasketValidator {
     if (request.getInstalments() == null || request.getInstalments() < 1) {
       errors.add(new FieldError("Instalments", "Must be at least 1"));
     }
+    language(errors, request.getLanguage());
+    merchantUrl(errors, request.getMerchantUrl());
     boolean itemsOk = items(errors, request.getItems());
     consumer(errors, request.getConsumer(), false);
     if (request.getShippingAddress() == null) {
@@ -106,6 +110,7 @@ public final class BasketValidator {
     boolean amountsOk = amount(errors, "TotalAmount", request.getTotalAmount(), true, false);
     requireLength(errors, "CurrencyCode", request.getCurrencyCode(), 3);
     requireLength(errors, "CountryCode", request.getCountryCode(), 2);
+    language(errors, request.getLanguage());
     boolean itemsOk = items(errors, request.getItems());
     if (amountsOk && itemsOk) {
       cartIdentity(
@@ -121,20 +126,23 @@ public final class BasketValidator {
 
   public static void validate(CreateCheckoutLinkRequest request) {
     List<FieldError> errors = new ArrayList<>();
-    boolean amountOk = amount(errors, "Amount", request.getAmount(), true, true);
     boolean hasItems = request.getItems() != null && !request.getItems().isEmpty();
-    if (amountOk && request.getAmount().signum() == 0 && !hasItems) {
+    if (request.getAmount() == null) {
+      if (!hasItems) {
+        errors.add(new FieldError("Amount", "Amount is required when there are no items"));
+      }
+    } else if (amount(errors, "Amount", request.getAmount(), true, true)
+        && request.getAmount().signum() == 0
+        && !hasItems) {
       errors.add(new FieldError("Amount", "Must be greater than zero, or provide items"));
     }
-    if (request.getChannel() == null) {
-      errors.add(new FieldError("Channel", "Must be Link or Qr"));
-    } else if (request.getChannel() == CheckoutLinkChannel.LINK && isBlank(request.getPhone())) {
+    if ((request.getChannel() == null || request.getChannel() == CheckoutLinkChannel.LINK)
+        && isBlank(request.getPhone())) {
       errors.add(new FieldError("Phone", "Customer phone number is required for a payment link"));
     }
-    if (request.getLanguage() != null
-        && !request.getLanguage().equals("ar")
-        && !request.getLanguage().equals("en")) {
-      errors.add(new FieldError("Language", "Must be ar or en"));
+    language(errors, request.getLanguage());
+    if (request.getEjarContractNumber() != null && request.getEjarContractNumber().length() > 50) {
+      errors.add(new FieldError("EjarContractNumber", "Must be at most 50 characters"));
     }
     if (request.getOrderReferenceId() != null && request.getOrderReferenceId().length() > 255) {
       errors.add(new FieldError("OrderReferenceId", "Must be at most 255 characters"));
@@ -188,7 +196,13 @@ public final class BasketValidator {
       }
       requireText(errors, prefix + "ReferenceId", item.getReferenceId(), 0);
       requireText(errors, prefix + "Name", item.getName(), 0);
-      requireText(errors, prefix + "Type", item.getType(), 0);
+      if (item.getType() != null) {
+        if (isBlank(item.getType())) {
+          errors.add(new FieldError(prefix + "Type", "Must not be empty"));
+        } else if (item.getType().length() > 50) {
+          errors.add(new FieldError(prefix + "Type", "Must be at most 50 characters"));
+        }
+      }
       boolean quantityOk = item.getQuantity() != null && item.getQuantity() >= 1;
       if (!quantityOk) {
         errors.add(new FieldError(prefix + "Quantity", "Must be at least 1"));
@@ -255,6 +269,24 @@ public final class BasketValidator {
     requireText(errors, "Consumer.PhoneNumber", consumer.getPhoneNumber(), 0);
     if (emailRequired) {
       requireText(errors, "Consumer.Email", consumer.getEmail(), 0);
+    }
+  }
+
+  @SuppressWarnings("deprecation")
+  private static void merchantUrl(List<FieldError> errors, MerchantUrl merchantUrl) {
+    if (merchantUrl == null) {
+      return;
+    }
+    requireText(errors, "MerchantUrl.Success", merchantUrl.getSuccess(), 0);
+    requireText(errors, "MerchantUrl.Failure", merchantUrl.getFailure(), 0);
+    if (!isBlank(merchantUrl.getNotification())) {
+      errors.add(new FieldError("MerchantUrl.Notification", "Is reserved and must not be set"));
+    }
+  }
+
+  private static void language(List<FieldError> errors, String language) {
+    if (language != null && !language.equals("ar") && !language.equals("en")) {
+      errors.add(new FieldError("Language", "Must be ar or en"));
     }
   }
 

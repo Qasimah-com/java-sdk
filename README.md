@@ -1,5 +1,7 @@
 # Qasimha SDK for Java
 
+New to Qasimha? Read [Getting started](../../docs/getting-started.md) first for the overall flow; this page covers the Java SDK only.
+
 Server-side Java client for the Qasimha merchant API: quote instalment plans for an amount, create
 checkout sessions, manage orders (by Qasimha id or by your own reference), issue payment links and
 QR orders, read settlements, manage webhook endpoints and verify webhook deliveries.
@@ -10,6 +12,10 @@ QR orders, read settlements, manage webhook endpoints and verify webhook deliver
 - Blocking calls that return typed models; every error is a typed exception
 
 ## Install
+
+Version 0.1.0 is not yet on Maven Central, so the coordinates below do not resolve from there yet.
+Install the SDK into your local Maven repository (`~/.m2`) from your copy of this repository
+(JDK 11 or newer):
 
 ```sh
 cd /path/to/repo/sdks/java              # your copy of this repository

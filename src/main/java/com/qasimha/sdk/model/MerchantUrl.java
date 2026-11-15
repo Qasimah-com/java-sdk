@@ -1,15 +1,18 @@
 package com.qasimha.sdk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Where the hosted checkout sends the shopper afterwards; honoured since the API release of
- * 2026-09-25.
+ * 2026-09-25. {@code success} and {@code failure} are both required; {@code cancel} is optional and
+ * the API falls back to {@code failure} without it.
  */
 public final class MerchantUrl {
 
   private String success;
   private String failure;
   private String cancel;
-  private String notification;
+  @JsonIgnore private String notification;
 
   private MerchantUrl() {}
 
@@ -36,6 +39,10 @@ public final class MerchantUrl {
     return cancel;
   }
 
+  /**
+   * @deprecated reserved by the API and never sent; a request that sets it fails validation.
+   */
+  @Deprecated
   public String getNotification() {
     return notification;
   }
@@ -64,6 +71,10 @@ public final class MerchantUrl {
       return this;
     }
 
+    /**
+     * @deprecated reserved by the API and never sent; a request that sets it fails validation.
+     */
+    @Deprecated
     public Builder notification(String notification) {
       this.notification = notification;
       return this;

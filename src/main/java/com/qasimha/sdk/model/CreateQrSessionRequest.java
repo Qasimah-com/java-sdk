@@ -13,6 +13,7 @@ public final class CreateQrSessionRequest {
   private String currencyCode;
   private String countryCode;
   private List<Item> items;
+  private String language;
 
   private CreateQrSessionRequest(Builder builder) {
     this.orderReferenceId = builder.orderReferenceId;
@@ -20,6 +21,7 @@ public final class CreateQrSessionRequest {
     this.currencyCode = builder.currencyCode;
     this.countryCode = builder.countryCode;
     this.items = Collections.unmodifiableList(new ArrayList<>(builder.items));
+    this.language = builder.language;
   }
 
   public static Builder builder() {
@@ -46,6 +48,11 @@ public final class CreateQrSessionRequest {
     return items;
   }
 
+  /** {@code ar} or {@code en}; when unset the API uses the {@code Accept-Language} header. */
+  public String getLanguage() {
+    return language;
+  }
+
   /** Builds a {@link CreateQrSessionRequest}. */
   public static final class Builder {
     private String orderReferenceId;
@@ -53,6 +60,7 @@ public final class CreateQrSessionRequest {
     private String currencyCode = "SAR";
     private String countryCode = "SA";
     private final List<Item> items = new ArrayList<>();
+    private String language;
 
     private Builder() {}
 
@@ -86,6 +94,11 @@ public final class CreateQrSessionRequest {
 
     public Builder addItem(Item item) {
       this.items.add(item);
+      return this;
+    }
+
+    public Builder language(String language) {
+      this.language = language;
       return this;
     }
 

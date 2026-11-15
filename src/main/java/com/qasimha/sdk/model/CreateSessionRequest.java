@@ -28,6 +28,7 @@ public final class CreateSessionRequest {
   private Address billingAddress;
   private RiskAssessment riskAssessment;
   private MerchantUrl merchantUrl;
+  private String language;
 
   private CreateSessionRequest(Builder builder) {
     this.orderReferenceId = builder.orderReferenceId;
@@ -46,6 +47,7 @@ public final class CreateSessionRequest {
     this.billingAddress = builder.billingAddress;
     this.riskAssessment = builder.riskAssessment;
     this.merchantUrl = builder.merchantUrl;
+    this.language = builder.language;
   }
 
   public static Builder builder() {
@@ -84,7 +86,12 @@ public final class CreateSessionRequest {
     return description;
   }
 
-  /** The wire value, one of {@link CheckoutPaymentType}. */
+  /**
+   * The wire value, one of {@link CheckoutPaymentType}; null unless set.
+   *
+   * @deprecated the API ignores it; it is sent only when set.
+   */
+  @Deprecated
   public String getPaymentType() {
     return paymentType;
   }
@@ -117,6 +124,11 @@ public final class CreateSessionRequest {
     return merchantUrl;
   }
 
+  /** {@code ar} or {@code en}; when unset the API uses the {@code Accept-Language} header. */
+  public String getLanguage() {
+    return language;
+  }
+
   /** Builds a {@link CreateSessionRequest}. */
   public static final class Builder {
     private String orderReferenceId;
@@ -127,7 +139,7 @@ public final class CreateSessionRequest {
     private String currencyCode = "SAR";
     private String countryCode = "SA";
     private String description;
-    private String paymentType = CheckoutPaymentType.PAY_BY_INSTALMENTS.getValue();
+    private String paymentType;
     private Integer instalments = 4;
     private final List<Item> items = new ArrayList<>();
     private Consumer consumer;
@@ -135,6 +147,7 @@ public final class CreateSessionRequest {
     private Address billingAddress;
     private RiskAssessment riskAssessment;
     private MerchantUrl merchantUrl;
+    private String language;
 
     private Builder() {}
 
@@ -178,12 +191,21 @@ public final class CreateSessionRequest {
       return this;
     }
 
+    /**
+     * @deprecated the API ignores it; it is sent only when set.
+     */
+    @Deprecated
     public Builder paymentType(CheckoutPaymentType paymentType) {
       this.paymentType = paymentType == null ? null : paymentType.getValue();
       return this;
     }
 
-    /** The wire value of the payment type; validated against the four known values. */
+    /**
+     * The wire value of the payment type; validated against the four known values.
+     *
+     * @deprecated the API ignores it; it is sent only when set.
+     */
+    @Deprecated
     public Builder paymentType(String paymentType) {
       this.paymentType = paymentType;
       return this;
@@ -229,6 +251,11 @@ public final class CreateSessionRequest {
 
     public Builder merchantUrl(MerchantUrl merchantUrl) {
       this.merchantUrl = merchantUrl;
+      return this;
+    }
+
+    public Builder language(String language) {
+      this.language = language;
       return this;
     }
 

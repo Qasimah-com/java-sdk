@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.qasimha.sdk.exception.ApiException;
 import com.qasimha.sdk.exception.DuplicateOrderReferenceException;
 import com.qasimha.sdk.exception.OrderDeclinedException;
+import com.qasimha.sdk.model.CheckoutPaymentType;
 import com.qasimha.sdk.model.CreatePosSessionRequest;
 import com.qasimha.sdk.model.CreateQrSessionRequest;
 import com.qasimha.sdk.model.CreateSessionRequest;
@@ -69,7 +70,8 @@ class CheckoutTest {
       String body = api.lastRequest().bodyText();
       assertTrue(body.contains("\"totalAmount\":1302.10"), body);
       assertTrue(body.contains("\"taxAmount\":173.10"), body);
-      assertTrue(body.contains("\"paymentType\":\"pay_by_instalments\""), body);
+      assertFalse(body.contains("paymentType"), body);
+      assertFalse(body.contains("\"language\""), body);
       assertTrue(body.contains("\"instalments\":4"), body);
       assertTrue(body.contains("\"currencyCode\":\"SAR\""), body);
       assertTrue(body.contains("\"countryCode\":\"SA\""), body);
@@ -83,6 +85,59 @@ class CheckoutTest {
       assertFalse(body.contains("merchantId"), body);
       assertFalse(body.contains("decisionFeatures"), body);
       assertFalse(body.contains("billingAddress"), body);
+    }
+  }
+
+  @Test
+  @SuppressWarnings("deprecation")
+  void paymentTypeAndLanguageAreSentWhenSet() throws Exception {
+    try (MockApi api = new MockApi()) {
+      api.enqueue(201, SESSION);
+      client(api, null)
+          .checkout()
+          .createSession(
+              Fixtures.threeLineBasket("CART-PT")
+                  .paymentType(CheckoutPaymentType.PAY_BY_INSTALMENTS)
+                  .language("en")
+                  .build());
+      String body = api.lastRequest().bodyText();
+      assertTrue(body.contains("\"paymentType\":\"pay_by_instalments\""), body);
+      assertTrue(body.contains("\"language\":\"en\""), body);
+    }
+  }
+
+  @Test
+  void merchantUrlWithoutCancelAndLineWithoutTypeAreSentAsGiven() throws Exception {
+    try (MockApi api = new MockApi()) {
+      api.enqueue(201, SESSION);
+      client(api, null)
+          .checkout()
+          .createSession(
+              CreateSessionRequest.builder()
+                  .orderReferenceId("CART-MU")
+                  .totalAmount(new BigDecimal("250.00"))
+                  .addItem(
+                      Item.builder()
+                          .referenceId("SKU-S")
+                          .name("Fitting")
+                          .quantity(1)
+                          .unitPrice(new BigDecimal("250.00"))
+                          .build())
+                  .consumer(Fixtures.consumer())
+                  .shippingAddress(Fixtures.shippingAddress())
+                  .merchantUrl(
+                      MerchantUrl.builder()
+                          .success("https://store.example.test/ok")
+                          .failure("https://store.example.test/fail")
+                          .build())
+                  .build());
+      String body = api.lastRequest().bodyText();
+      assertTrue(
+          body.contains(
+              "\"merchantUrl\":{\"success\":\"https://store.example.test/ok\","
+                  + "\"failure\":\"https://store.example.test/fail\"}"),
+          body);
+      assertFalse(body.contains("\"type\""), body);
     }
   }
 
@@ -248,6 +303,30 @@ class CheckoutTest {
       assertEquals(OrderStatus.NEW, session.getStatus());
       assertEquals("/api/v1/pay/qr/create", api.lastRequest().path);
       assertFalse(api.lastRequest().bodyText().contains("consumer"));
+      assertFalse(api.lastRequest().bodyText().contains("language"));
+    }
+  }
+
+  @Test
+  void qrSessionSendsTheLanguageWhenSet() throws Exception {
+    try (MockApi api = new MockApi()) {
+      api.enqueue(
+          201,
+          Fixtures.envelope(
+              "SESSION_CREATED",
+              "{\"installmentId\":\""
+                  + ORDER_ID
+                  + "\",\"qrCodeUrl\":\"https://checkout.example.test/qr/1\",\"status\":\"New\"}"));
+      client(api, null)
+          .checkout()
+          .createQrSession(
+              CreateQrSessionRequest.builder()
+                  .orderReferenceId("QR-L")
+                  .totalAmount(new BigDecimal("250.00"))
+                  .addItem(Fixtures.item("SKU-Q", "Kettle", Item.TYPE_PHYSICAL, 1, "250.00"))
+                  .language("ar")
+                  .build());
+      assertTrue(api.lastRequest().bodyText().contains("\"language\":\"ar\""));
     }
   }
 

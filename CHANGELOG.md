@@ -8,6 +8,9 @@ All notable changes to `com.qasimha:qasimha-sdk` are documented here. The format
 
 ### Added
 
+- `CreateSessionRequest.Builder.language(String)` and `CreateQrSessionRequest.Builder.language(String)`:
+  an optional per-request `ar` | `en`, sent in the body only when set and checked client-side.
+  Without it the API uses the `Accept-Language` header.
 - `checkout().getPlans(amount)` and `getPlans(amount, GetPlansOptions)`: the instalment plans
   the merchant's policy offers for an amount (`GET /widget/plans?amount=&currency=SAR&lang=`),
   with the models `Plans` (`merchantName`, `currency`, `minAmount`, `maxAmount`, `plans`,
@@ -35,9 +38,30 @@ All notable changes to `com.qasimha:qasimha-sdk` are documented here. The format
 
 ### Changed
 
+- Checkout link `amount` is required only when there are no `items`; with items and no amount it
+  is left out of the body and the API computes the total. With neither, a client-side
+  `ValidationException` names `Amount`.
+- Checkout link `channel` is optional: `channel(null)` is no longer a validation error, is left out
+  of the body and is treated as `Link` (a `phone` is required). The builder still defaults to
+  `LINK`.
+- Checkout link `ejarContractNumber` is limited to 50 characters client-side.
+- `Item.type` is optional free text of at most 50 characters and is left out of the body when
+  unset; an empty value is refused.
+- `MerchantUrl` must carry both `success` and `failure` when it is given; `cancel` stays optional.
+- `CreateSessionRequest` no longer sends `paymentType` unless it is set; the builder default
+  `pay_by_instalments` is gone and `getPaymentType()` is null until set. A value that is set is
+  still validated.
+
 - `getRaw()` on orders follows the typed order responses of the API: enum names instead of
   integers, and internal fields that are not part of the contract are no longer included.
   `StatusChange.getMetadata()` is always null because the API no longer sends it.
+
+### Deprecated
+
+- `MerchantUrl.Builder.notification(String)` and `getNotification()`: the field is reserved by the
+  API. It is never serialised, and a non-blank value fails client-side validation on
+  `MerchantUrl.Notification`.
+- `CreateSessionRequest.Builder.paymentType(...)` and `getPaymentType()`: the API ignores the field.
 
 ## [0.1.0] - 2026-09-25
 

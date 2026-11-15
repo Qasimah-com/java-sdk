@@ -53,7 +53,10 @@ public final class Item {
     return name;
   }
 
-  /** {@link #TYPE_PHYSICAL} or {@link #TYPE_DIGITAL}. */
+  /**
+   * Optional free text of at most 50 characters, such as {@link #TYPE_PHYSICAL}, {@link
+   * #TYPE_DIGITAL} or {@code service}.
+   */
   public String getType() {
     return type;
   }

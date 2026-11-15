@@ -112,6 +112,41 @@ class CheckoutLinksTest {
   }
 
   @Test
+  void itemsWithoutAmountLeaveTheAmountOut() throws Exception {
+    try (MockApi api = new MockApi()) {
+      String created =
+          Fixtures.envelope(
+              "LINK_CREATED",
+              "{\"id\":\"" + LINK_ID + "\",\"channel\":\"Link\",\"status\":\"AwaitingCheckout\"}");
+      api.enqueue(201, created).enqueue(201, created);
+      CheckoutLinkItem kettle =
+          CheckoutLinkItem.builder()
+              .name("Kettle")
+              .quantity(2)
+              .unitPrice(new BigDecimal("125.00"))
+              .build();
+      client(api)
+          .checkoutLinks()
+          .create(
+              CreateCheckoutLinkRequest.builder().phone("+966512349999").addItem(kettle).build());
+      String body = api.lastRequest().bodyText();
+      assertFalse(body.contains("\"amount\""), body);
+      assertTrue(body.contains("\"channel\":\"Link\""), body);
+
+      client(api)
+          .checkoutLinks()
+          .create(
+              CreateCheckoutLinkRequest.builder()
+                  .channel(null)
+                  .phone("+966512349999")
+                  .addItem(kettle)
+                  .build());
+      assertFalse(api.lastRequest().bodyText().contains("\"channel\""));
+      assertEquals(2, api.requestCount());
+    }
+  }
+
+  @Test
   void listGetAndCancel() throws Exception {
     try (MockApi api = new MockApi()) {
       api.enqueue(

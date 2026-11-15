@@ -6,9 +6,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The body of {@code POST /merchant/checkout-links}. {@code channel} {@link
- * CheckoutLinkChannel#LINK} needs a {@code phone}; {@code ejarContractNumber} is required for a
- * real-estate merchant and ignored otherwise.
+ * The body of {@code POST /merchant/checkout-links}. {@code channel} is optional and defaults to
+ * {@link CheckoutLinkChannel#LINK}, which needs a {@code phone}. {@code amount} is required only
+ * when there are no {@code items}; with items and no amount the API computes {@code Σ quantity ×
+ * unitPrice}. {@code ejarContractNumber} (at most 50 characters) is required for a real-estate
+ * merchant and ignored otherwise.
  */
 public final class CreateCheckoutLinkRequest {
 
